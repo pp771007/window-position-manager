@@ -5,6 +5,8 @@ import win32gui
 import win32con
 import os
 from tkinter import messagebox
+import sys
+import ctypes
 
 class WindowManager:
     def __init__(self):
@@ -246,6 +248,17 @@ class WindowManager:
     def run(self):
         self.root.mainloop()
 
+def is_admin():
+    try:
+        return ctypes.windll.shell32.IsUserAnAdmin()
+    except:
+        return False
+    
 if __name__ == "__main__":
+    if not is_admin():
+        # 如果不是管理員,則重新以管理員身分執行
+        ctypes.windll.shell32.ShellExecuteW(None, "runas", sys.executable, " ".join(sys.argv), None, 1)
+        sys.exit()
+
     app = WindowManager()
     app.run()
