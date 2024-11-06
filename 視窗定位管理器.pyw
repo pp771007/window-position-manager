@@ -15,9 +15,16 @@ class WindowManager:
         self.window_list = []
         self.config_file = "window_config.txt"
         
+        self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
+
         self.create_ui()
         self.load_config()
     
+    def on_closing(self):
+        # 關閉前儲存設定
+        self.save_config()
+        self.root.destroy()
+        
     def get_window_position(self, window_name):
         """獲取指定視窗的當前位置"""
         position = [0, 0]  # 預設值
@@ -190,7 +197,7 @@ class WindowManager:
         # 下拉選單
         ttk.Label(add_window, text="選擇應用程式:").pack(pady=10)
         window_combobox = ttk.Combobox(add_window, values=sorted(windows), width=0)
-        window_combobox.pack(pady=5, fill=tk.X)
+        window_combobox.pack(pady=5, padx=10, fill=tk.X)
         
         def confirm():
             selected = window_combobox.get()
