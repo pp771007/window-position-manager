@@ -50,7 +50,7 @@ class WindowController:
         self.main_frame.grid(row=0, column=0, sticky=(tk.W, tk.E, tk.N, tk.S))
         
         # 新增按鈕
-        ttk.Button(self.main_frame, text="新增視窗", command=self.add_window).grid(row=0, column=0, pady=5, sticky=tk.W)
+        ttk.Button(self.main_frame, text="➕ 新增視窗", command=self.add_window).grid(row=0, column=0, pady=5, sticky=tk.W)
         
         # 建立列表標題框架
         self.header_frame = ttk.Frame(self.main_frame)
@@ -65,11 +65,11 @@ class WindowController:
             command=self.select_all_windows
         )
         self.select_all_checkbox.grid(row=0, column=0, padx=5)
-        ttk.Label(self.header_frame, text="視窗名稱", width=35).grid(row=0, column=1, padx=5)
-        ttk.Label(self.header_frame, text="X座標", width=8).grid(row=0, column=2, padx=5)
-        ttk.Label(self.header_frame, text="Y座標", width=8).grid(row=0, column=3, padx=5)
-        ttk.Label(self.header_frame, text="寬度", width=8).grid(row=0, column=4, padx=5)
-        ttk.Label(self.header_frame, text="高度", width=8).grid(row=0, column=5, padx=5)
+        ttk.Label(self.header_frame, text="視窗名稱", width=35, anchor='center').grid(row=0, column=1, padx=7)
+        ttk.Label(self.header_frame, text="X座標", width=5, anchor='center').grid(row=0, column=2, padx=7)
+        ttk.Label(self.header_frame, text="Y座標", width=5, anchor='center').grid(row=0, column=3, padx=7)
+        ttk.Label(self.header_frame, text="寬度", width=5, anchor='center').grid(row=0, column=4, padx=7)
+        ttk.Label(self.header_frame, text="高度", width=5, anchor='center').grid(row=0, column=5, padx=7)
         
         # 分隔線
         separator = ttk.Separator(self.main_frame, orient='horizontal')
@@ -83,12 +83,20 @@ class WindowController:
         control_frame = ttk.Frame(self.main_frame)
         control_frame.grid(row=4, column=0, pady=10)
         
+        # 控制按鈕樣式
+        style = ttk.Style()
+        style.configure('Position.TButton', foreground='blue')
+        style.configure('Size.TButton', foreground='green')
+        style.configure('Minimize.TButton', foreground='orange')
+        style.configure('Restore.TButton', foreground='purple')
+        style.configure('Delete.TButton', foreground='red')
+        
         # 控制按鈕
-        ttk.Button(control_frame, text="定位", command=lambda: self.apply_settings("position"), width=10).grid(row=0, column=0, padx=5)
-        ttk.Button(control_frame, text="調整大小", command=lambda: self.apply_settings("size"), width=10).grid(row=0, column=1, padx=5)
-        ttk.Button(control_frame, text="縮小", command=lambda: self.apply_settings("minimize"), width=10).grid(row=0, column=2, padx=5)
-        ttk.Button(control_frame, text="顯示", command=lambda: self.apply_settings("restore"), width=10).grid(row=0, column=3, padx=5)
-        ttk.Button(control_frame, text="刪除", command=self.delete_selected, width=10).grid(row=0, column=4, padx=5)
+        ttk.Button(control_frame, text="📌 定位", command=lambda: self.apply_settings("position"), width=10, style='Position.TButton').grid(row=0, column=0, padx=5)
+        ttk.Button(control_frame, text="📐 調整大小", command=lambda: self.apply_settings("size"), width=14, style='Size.TButton').grid(row=0, column=1, padx=5)
+        ttk.Button(control_frame, text="🔽 縮小", command=lambda: self.apply_settings("minimize"), width=10, style='Minimize.TButton').grid(row=0, column=2, padx=5)
+        ttk.Button(control_frame, text="👀 顯示", command=lambda: self.apply_settings("restore"), width=10, style='Restore.TButton').grid(row=0, column=3, padx=5)
+        ttk.Button(control_frame, text="🗑️ 刪除", command=self.delete_selected, width=10, style='Delete.TButton').grid(row=0, column=4, padx=5)
         
         # 視窗關閉事件
         self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
@@ -161,7 +169,7 @@ class WindowController:
                 self.update_list()
                 dialog.destroy()
         
-        ttk.Button(dialog, text="確認", command=on_confirm).grid(row=1, column=0, pady=10)
+        ttk.Button(dialog, text="✅ 確認", command=on_confirm).grid(row=1, column=0, pady=10)
     
     def select_all_windows(self):
         # 全選 Checkbox 狀態變更時更新所有項目的 Checkbox
@@ -205,22 +213,22 @@ class WindowController:
             vcmd = (self.root.register(self.validate_number), '%P')
             
             # X座標
-            x_entry = ttk.Entry(frame, width=8, justify='right', validate='key', validatecommand=vcmd)
+            x_entry = ttk.Entry(frame, width=5, justify='right', validate='key', validatecommand=vcmd)
             x_entry.insert(0, str(item['x']))
             x_entry.grid(row=0, column=2, padx=5)
             
             # Y座標
-            y_entry = ttk.Entry(frame, width=8, justify='right', validate='key', validatecommand=vcmd)
+            y_entry = ttk.Entry(frame, width=5, justify='right', validate='key', validatecommand=vcmd)
             y_entry.insert(0, str(item['y']))
             y_entry.grid(row=0, column=3, padx=5)
             
             # 寬度
-            width_entry = ttk.Entry(frame, width=8, justify='right', validate='key', validatecommand=vcmd)
+            width_entry = ttk.Entry(frame, width=5, justify='right', validate='key', validatecommand=vcmd)
             width_entry.insert(0, str(item['width']))
             width_entry.grid(row=0, column=4, padx=5)
             
             # 高度
-            height_entry = ttk.Entry(frame, width=8, justify='right', validate='key', validatecommand=vcmd)
+            height_entry = ttk.Entry(frame, width=5, justify='right', validate='key', validatecommand=vcmd)
             height_entry.insert(0, str(item['height']))
             height_entry.grid(row=0, column=5, padx=5)
             
