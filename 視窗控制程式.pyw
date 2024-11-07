@@ -25,8 +25,13 @@ class WindowController:
         self.root = tk.Tk()
         self.root.title("視窗控制程式")
         
-        # 定義icon.ico文件的路徑
-        icon_path = "favicon.ico"
+        # 檢查是否在 PyInstaller 打包的環境中運行
+        if getattr(sys, 'frozen', False):
+            # 獲取打包後的應用程序路徑
+            icon_path = os.path.join(sys._MEIPASS, "favicon.ico")
+        else:
+            # 開發模式下的圖標路徑
+            icon_path = "favicon.ico"
 
         # 檢查圖標文件是否存在
         if os.path.exists(icon_path):
