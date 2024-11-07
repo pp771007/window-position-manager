@@ -64,8 +64,9 @@ class WindowController:
             variable=self.select_all_var,
             command=self.select_all_windows
         )
+        self.window_name_size = 44
         self.select_all_checkbox.grid(row=0, column=0, padx=5)
-        ttk.Label(self.header_frame, text="視窗名稱", width=35, anchor='center').grid(row=0, column=1, padx=7)
+        ttk.Label(self.header_frame, text="視窗名稱", width=self.window_name_size, anchor='center').grid(row=0, column=1, padx=7)
         ttk.Label(self.header_frame, text="X座標", width=5, anchor='center').grid(row=0, column=2, padx=7)
         ttk.Label(self.header_frame, text="Y座標", width=5, anchor='center').grid(row=0, column=3, padx=7)
         ttk.Label(self.header_frame, text="寬度", width=5, anchor='center').grid(row=0, column=4, padx=7)
@@ -85,18 +86,18 @@ class WindowController:
         
         # 控制按鈕樣式
         style = ttk.Style()
-        style.configure('Position.TButton', foreground='blue')
-        style.configure('Size.TButton', foreground='green')
-        style.configure('Minimize.TButton', foreground='orange')
-        style.configure('Restore.TButton', foreground='purple')
-        style.configure('Delete.TButton', foreground='red')
+        style.configure('Position.TButton', foreground='blue', font=('Arial', 12), padding=(0, 10, 0, 10))
+        style.configure('Size.TButton', foreground='green', font=('Arial', 12), padding=(0, 10, 0, 10))
+        style.configure('Minimize.TButton', foreground='orange', font=('Arial', 12), padding=(0, 10, 0, 10))
+        style.configure('Restore.TButton', foreground='purple', font=('Arial', 12), padding=(0, 10, 0, 10))
+        style.configure('Delete.TButton', foreground='red', font=('Arial', 12), padding=(0, 10, 0, 10))
         
         # 控制按鈕
-        ttk.Button(control_frame, text="📌 定位", command=lambda: self.apply_settings("position"), width=10, style='Position.TButton').grid(row=0, column=0, padx=5)
-        ttk.Button(control_frame, text="📐 調整大小", command=lambda: self.apply_settings("size"), width=14, style='Size.TButton').grid(row=0, column=1, padx=5)
-        ttk.Button(control_frame, text="🔽 縮小", command=lambda: self.apply_settings("minimize"), width=10, style='Minimize.TButton').grid(row=0, column=2, padx=5)
-        ttk.Button(control_frame, text="👀 顯示", command=lambda: self.apply_settings("restore"), width=10, style='Restore.TButton').grid(row=0, column=3, padx=5)
-        ttk.Button(control_frame, text="🗑️ 刪除", command=self.delete_selected, width=10, style='Delete.TButton').grid(row=0, column=4, padx=5)
+        ttk.Button(control_frame, text="📌定位", command=lambda: self.apply_settings("position"), width=10, style='Position.TButton').grid(row=0, column=0, padx=5)
+        ttk.Button(control_frame, text="📐調整大小", command=lambda: self.apply_settings("size"), width=14, style='Size.TButton').grid(row=0, column=1, padx=5)
+        ttk.Button(control_frame, text="🔽縮小", command=lambda: self.apply_settings("minimize"), width=10, style='Minimize.TButton').grid(row=0, column=2, padx=5)
+        ttk.Button(control_frame, text="👀顯示", command=lambda: self.apply_settings("restore"), width=10, style='Restore.TButton').grid(row=0, column=3, padx=5)
+        ttk.Button(control_frame, text="🗑️刪除", command=self.delete_selected, width=10, style='Delete.TButton').grid(row=0, column=4, padx=5)
         
         # 視窗關閉事件
         self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
@@ -204,10 +205,10 @@ class WindowController:
             var.trace_add('write', lambda *args, index=i, variable=var: on_checkbox_change(index, variable))
             
             # 視窗名稱 (固定寬度，過長時顯示...)
-            name_label = ttk.Label(frame, text=item['name'], width=35)
+            name_label = ttk.Label(frame, text=item['name'], width=self.window_name_size)
             name_label.grid(row=0, column=1, padx=5)
-            if len(item['name']) > 30:
-                name_label.configure(text=item['name'][:27] + "...")
+            if len(item['name']) > (self.window_name_size-5):
+                name_label.configure(text=item['name'][:(self.window_name_size-8)] + "...")
             
             # 創建驗證器
             vcmd = (self.root.register(self.validate_number), '%P')
