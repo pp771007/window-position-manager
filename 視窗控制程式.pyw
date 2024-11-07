@@ -57,7 +57,14 @@ class WindowController:
         self.header_frame.grid(row=1, column=0, pady=(5,0), sticky=tk.W)
         
         # 列表標題
-        ttk.Label(self.header_frame, text="", width=3).grid(row=0, column=0, padx=5)  # Checkbox空間
+        # 在列表標題框架中加入全選 Checkbox
+        self.select_all_var = tk.BooleanVar(value=False)
+        self.select_all_checkbox = ttk.Checkbutton(
+            self.header_frame,
+            variable=self.select_all_var,
+            command=self.select_all_windows
+        )
+        self.select_all_checkbox.grid(row=0, column=0, padx=5)
         ttk.Label(self.header_frame, text="視窗名稱", width=35).grid(row=0, column=1, padx=5)
         ttk.Label(self.header_frame, text="X座標", width=8).grid(row=0, column=2, padx=5)
         ttk.Label(self.header_frame, text="Y座標", width=8).grid(row=0, column=3, padx=5)
@@ -155,6 +162,13 @@ class WindowController:
                 dialog.destroy()
         
         ttk.Button(dialog, text="確認", command=on_confirm).grid(row=1, column=0, pady=10)
+    
+    def select_all_windows(self):
+        # 全選 Checkbox 狀態變更時更新所有項目的 Checkbox
+        select_all = self.select_all_var.get()
+        for item in self.window_items:
+            item['checked'] = select_all
+        self.update_list()
 
     def update_list(self):
         # 清除現有列表
