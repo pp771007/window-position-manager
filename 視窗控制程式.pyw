@@ -7,7 +7,6 @@ import psutil
 import json
 import os
 import ctypes
-from tkinter import simpledialog
 import sys
 
 def is_admin():
@@ -26,6 +25,14 @@ class WindowController:
         self.root = tk.Tk()
         self.root.title("視窗控制程式")
         
+        # 定義icon.ico文件的路徑
+        icon_path = "favicon.ico"
+
+        # 檢查圖標文件是否存在
+        if os.path.exists(icon_path):
+            # 如果文件存在，設置應用程式窗口的圖標
+            self.root.iconbitmap(icon_path)
+
         # 設定檔路徑
         self.config_file = "window_settings.txt"
         
@@ -45,12 +52,12 @@ class WindowController:
         self.header_frame.grid(row=1, column=0, pady=(5,0), sticky=tk.W)
         
         # 列表標題
-        ttk.Label(self.header_frame, text="", width=3).grid(row=0, column=0)  # Checkbox空間
-        ttk.Label(self.header_frame, text="視窗名稱", width=30).grid(row=0, column=1)
-        ttk.Label(self.header_frame, text="X座標", width=8).grid(row=0, column=2)
-        ttk.Label(self.header_frame, text="Y座標", width=8).grid(row=0, column=3)
-        ttk.Label(self.header_frame, text="寬度", width=8).grid(row=0, column=4)
-        ttk.Label(self.header_frame, text="高度", width=8).grid(row=0, column=5)
+        ttk.Label(self.header_frame, text="", width=3).grid(row=0, column=0, padx=5)  # Checkbox空間
+        ttk.Label(self.header_frame, text="視窗名稱", width=35).grid(row=0, column=1, padx=5)
+        ttk.Label(self.header_frame, text="X座標", width=8).grid(row=0, column=2, padx=5)
+        ttk.Label(self.header_frame, text="Y座標", width=8).grid(row=0, column=3, padx=5)
+        ttk.Label(self.header_frame, text="寬度", width=8).grid(row=0, column=4, padx=5)
+        ttk.Label(self.header_frame, text="高度", width=8).grid(row=0, column=5, padx=5)
         
         # 分隔線
         separator = ttk.Separator(self.main_frame, orient='horizontal')
@@ -98,7 +105,7 @@ class WindowController:
         # 創建新視窗
         dialog = tk.Toplevel(self.root)
         dialog.title("選擇視窗")
-        dialog.geometry("350x100")
+        dialog.geometry("400x100")
         dialog.transient(self.root)  # 設置為主視窗的子視窗
         dialog.grab_set()  # 模態視窗
         
@@ -109,8 +116,8 @@ class WindowController:
         root_height = self.root.winfo_height()
         
         # 計算置中的位置
-        center_x = root_x + (root_width // 2) - (300 // 2)
-        center_y = root_y + (root_height // 2) - (150 // 2)
+        center_x = root_x + (root_width // 2) - (400 // 2)
+        center_y = root_y + (root_height // 2) - (100 // 2)
         dialog.geometry(f"+{center_x}+{center_y}")
 
         # 獲取當前視窗列表
@@ -118,8 +125,10 @@ class WindowController:
         window_titles = [w[0] for w in windows]
         
         # 下拉選單
-        combo = ttk.Combobox(dialog, values=window_titles, state="readonly", width=40)
-        combo.grid(row=0, column=0, padx=10, pady=10)
+        dialog.grid_columnconfigure(0, weight=1)
+        combo = ttk.Combobox(dialog, values=window_titles, state="readonly")
+        combo.grid(row=0, column=0, padx=10, pady=10, sticky="ew")
+
         
         def on_confirm():
             selected_index = combo.current()
@@ -135,7 +144,7 @@ class WindowController:
                     'y': rect[1],
                     'width': rect[2] - rect[0],
                     'height': rect[3] - rect[1],
-                    'checked': False
+                    'checked': True
                 })
                 self.update_list()
                 dialog.destroy()
@@ -168,7 +177,7 @@ class WindowController:
             var.trace_add('write', lambda *args, index=i, variable=var: on_checkbox_change(index, variable))
             
             # 視窗名稱 (固定寬度，過長時顯示...)
-            name_label = ttk.Label(frame, text=item['name'], width=30)
+            name_label = ttk.Label(frame, text=item['name'], width=35)
             name_label.grid(row=0, column=1, padx=5)
             if len(item['name']) > 30:
                 name_label.configure(text=item['name'][:27] + "...")
@@ -266,11 +275,10 @@ class WindowController:
                     
                 self.window_items = settings.get('window_items', [])
                 
-                # 設置主視窗位置和大小
+                # 設置主視窗位置
                 geometry = settings.get('window_geometry', {})
                 if geometry:
-                    self.root.geometry(f"{geometry['width']}x{geometry['height']}+"
-                                     f"{geometry['x']}+{geometry['y']}")
+                    self.root.geometry(f"+{geometry['x']}+{geometry['y']}")
             except:
                 pass
 
