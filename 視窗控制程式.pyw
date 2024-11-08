@@ -82,22 +82,22 @@ class WindowController:
         
         # 控制按鈕框架
         control_frame = ttk.Frame(self.main_frame)
-        control_frame.grid(row=4, column=0, pady=10)
+        control_frame.grid(row=4, column=0, pady=(10, 0))
         
         # 控制按鈕樣式
         style = ttk.Style()
-        style.configure('Position.TButton', foreground='blue', font=('Arial', 12), padding=(0, 10, 0, 10))
-        style.configure('Size.TButton', foreground='green', font=('Arial', 12), padding=(0, 10, 0, 10))
-        style.configure('Minimize.TButton', foreground='orange', font=('Arial', 12), padding=(0, 10, 0, 10))
-        style.configure('Restore.TButton', foreground='purple', font=('Arial', 12), padding=(0, 10, 0, 10))
-        style.configure('Delete.TButton', foreground='red', font=('Arial', 12), padding=(0, 10, 0, 10))
+        style.configure('Position.TButton', foreground='blue', font=('Arial', 12, 'bold'), padding=(0, 10, 0, 10))
+        style.configure('Size.TButton', foreground='green', font=('Arial', 12, 'bold'), padding=(0, 10, 0, 10))
+        style.configure('Minimize.TButton', foreground='saddlebrown', font=('Arial', 12, 'bold'), padding=(0, 10, 0, 10))
+        style.configure('Restore.TButton', foreground='purple', font=('Arial', 12, 'bold'), padding=(0, 10, 0, 10))
+        style.configure('Delete.TButton', foreground='red', font=('Arial', 12, 'bold'), padding=(0, 10, 0, 10))
         
         # 控制按鈕
         ttk.Button(control_frame, text="📌定位", command=lambda: self.apply_settings("position"), width=10, style='Position.TButton').grid(row=0, column=0, padx=5)
         ttk.Button(control_frame, text="📐調整大小", command=lambda: self.apply_settings("size"), width=14, style='Size.TButton').grid(row=0, column=1, padx=5)
-        ttk.Button(control_frame, text="🔽縮小", command=lambda: self.apply_settings("minimize"), width=10, style='Minimize.TButton').grid(row=0, column=2, padx=5)
-        ttk.Button(control_frame, text="👀顯示", command=lambda: self.apply_settings("restore"), width=10, style='Restore.TButton').grid(row=0, column=3, padx=5)
-        ttk.Button(control_frame, text="🗑️刪除", command=self.delete_selected, width=10, style='Delete.TButton').grid(row=0, column=4, padx=5)
+        ttk.Button(control_frame, text="❌刪除", command=self.delete_selected, width=10, style='Delete.TButton').grid(row=0, column=2, padx=5)
+        ttk.Button(control_frame, text="🔽縮小", command=lambda: self.apply_settings("minimize"), width=10, style='Minimize.TButton').grid(row=0, column=3, padx=5)
+        ttk.Button(control_frame, text="👀顯示", command=lambda: self.apply_settings("restore"), width=10, style='Restore.TButton').grid(row=0, column=4, padx=5)
         
         # 視窗關閉事件
         self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
@@ -170,7 +170,7 @@ class WindowController:
                 self.update_list()
                 dialog.destroy()
         
-        ttk.Button(dialog, text="✅ 確認", command=on_confirm).grid(row=1, column=0, pady=10)
+        ttk.Button(dialog, text="✔️確認", command=on_confirm).grid(row=1, column=0, pady=10)
     
     def select_all_windows(self):
         # 全選 Checkbox 狀態變更時更新所有項目的 Checkbox
@@ -184,13 +184,9 @@ class WindowController:
         for widget in self.list_frame.winfo_children():
             widget.destroy()
         
-        # 設定列表樣式
-        style = ttk.Style()
-        style.configure('Custom.TFrame', background='white')
-        
         # 重新建立列表
         for i, item in enumerate(self.window_items):
-            frame = ttk.Frame(self.list_frame, style='Custom.TFrame')
+            frame = ttk.Frame(self.list_frame)
             frame.grid(row=i, column=0, pady=1, sticky=tk.W)
             
             # Checkbox
