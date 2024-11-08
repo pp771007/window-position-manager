@@ -94,10 +94,10 @@ class WindowController:
         
         # 控制按鈕
         ttk.Button(control_frame, text="📌定位", command=lambda: self.apply_settings("position"), width=10, style='Position.TButton').grid(row=0, column=0, padx=5)
-        ttk.Button(control_frame, text="📐調整大小", command=lambda: self.apply_settings("size"), width=14, style='Size.TButton').grid(row=0, column=1, padx=5)
+        ttk.Button(control_frame, text="📐調整寬高", command=lambda: self.apply_settings("size"), width=14, style='Size.TButton').grid(row=0, column=1, padx=5)
         ttk.Button(control_frame, text="❌刪除", command=self.delete_selected, width=10, style='Delete.TButton').grid(row=0, column=2, padx=5)
-        ttk.Button(control_frame, text="🔽縮小", command=lambda: self.apply_settings("minimize"), width=10, style='Minimize.TButton').grid(row=0, column=3, padx=5)
-        ttk.Button(control_frame, text="👀顯示", command=lambda: self.apply_settings("restore"), width=10, style='Restore.TButton').grid(row=0, column=4, padx=5)
+        ttk.Button(control_frame, text="👀顯示", command=lambda: self.apply_settings("restore"), width=10, style='Restore.TButton').grid(row=0, column=3, padx=5)
+        ttk.Button(control_frame, text="🔽縮小", command=lambda: self.apply_settings("minimize"), width=10, style='Minimize.TButton').grid(row=0, column=4, padx=5)
         
         # 視窗關閉事件
         self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
